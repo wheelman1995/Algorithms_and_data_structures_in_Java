@@ -1,10 +1,17 @@
 public class MainClass {
     public static void main(String[] args) {
-        System.out.println(pow(2, -3));
+        System.out.println(pow(1.1, -3));
         System.out.println(arrayMin(new Integer[]{0, -6, 1}, 0));
+        System.out.println(findMean(new Float[]{1.1f, 2.2f, 3.3f}));
     }
     //алгоритм работает за O(log n) умножений при возведении в чётную степень и за O(log n + 1) при возведении в нечётную
-    private static double pow(int base, int exponent) {
+    //если показатель степени чётный - то приводим x^n к виду x^(n/2) * x^(n/2), чтобы уменьшить кол-во умножений
+    //и передаём x^(n/2) в следующую итерацию метода, после получения результата перемножаем результаты - (x^(n/2) * x^(n/2))
+    //если показатель степени нечётный - то приводим x^n к виду x * x^(n-1), таким образом,
+    //делая показатель степени чётным и передаём возведение в чётную степень (x^(n-1)) в следующую итерацию метода
+    //после получения результата умножаем его на основание x - (x * x^(n-1))
+    //когда показатель степени доходит до 0, возвращаем 1 и идём вверх по итерациям к окончательному результату.
+    private static <T extends Number> double pow(T base, int exponent) {
         if (exponent < 0) {
             return 1 / pow(base, -exponent);
         } else {
@@ -13,7 +20,7 @@ public class MainClass {
                 double result = pow(base, exponent / 2);
                 return result * result;
             } else {
-                return base * pow(base, exponent - 1);
+                return base.doubleValue() * pow(base, exponent - 1);
             }
         }
     }
@@ -28,5 +35,13 @@ public class MainClass {
             } else {
                 return t[t.length - 1].doubleValue();
             }
+    }
+    
+    private static float findMean(Number[] number) {
+        float sum = 0;
+        for (int i = 0; i < number.length; i++) {
+            sum += number[i].doubleValue();
+        }
+        return sum / number.length;
     }
 }
