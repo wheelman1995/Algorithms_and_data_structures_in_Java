@@ -1,3 +1,4 @@
+import java.util.Arrays;
 
 public class Array {
     private int[] arr;
@@ -41,7 +42,7 @@ public class Array {
     }
 
     public void append(int value) {
-        if (size >= arr.length - 1) {
+        if (size > arr.length - 1) {
             int[] temp = arr;
             arr = new int[size * 2];
             System.arraycopy(temp, 0, arr, 0, size);
@@ -57,17 +58,31 @@ public class Array {
     }
 
     // homework
-//    public boolean delete(int index) {
-//
-//    }
-//
-//    public boolean deleteAll(int value) {
-//
-//    }
-//
-//    public boolean deleteAll() {
-//
-//    }
+    public boolean deleteAt(int index) {
+        if (index < 0 || index > size - 1)
+            throw new IndexOutOfBoundsException();
+        for (int i = index; i < size - 1; i++) {
+            arr[i] = arr[i + 1];
+        }
+        size--;
+        return true;
+    }
+
+    public boolean deleteAll(int value) {
+        boolean result = false;
+        for (int i = size - 1; i >= 0; i--) {
+            if (arr[i] == value) {
+                deleteAt(i);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    public boolean deleteAll() {
+        size = 0;
+        return true;
+    }
 
     public boolean isInArray(int value) {
         for (int i = 0; i < size; i++) {
@@ -106,17 +121,55 @@ public class Array {
         arr[b] = temp;
     }
 
-    public void sortBubble() {
+    // O(n + k)
+    //n - number of elements in input array
+    //k - range of input data
+    public void countingSort() {
+        int[] result = new int[size];
+        int range;
+        int min = arr[0];
+        int max = arr[0];
         for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size - 1; j++) {
+            if (arr[i] < min)
+                min = arr[i];
+            if (arr[i] > max)
+                max = arr[i];
+        }
+        range = max - min + 1;
+        int[] bucket = new int[range];
+        for (int i = 0; i < size; i++) {
+            bucket[arr[i] - min]++;
+        }
+        
+        System.out.println(Arrays.toString(bucket));
+    
+        for (int i = 1; i < bucket.length; i++) {
+            bucket[i] = bucket[i] + bucket[i - 1];
+        }
+    
+        System.out.println(Arrays.toString(bucket));
+        
+        for (int i = 0; i < size; i++) {
+            result[bucket[arr[i] - min] - 1] = arr[i];
+            bucket[arr[i] - min]--;
+        }
+        System.out.println(Arrays.toString(result));
+        arr = result;
+        isSorted = true;
+    }
+    
+    // O(n^2)
+    public void sortBubble() {
+        for (int i = size - 1; i > 0; i--) {
+            for (int j = 0; j < i; j++) {
                 if (arr[j] > arr[j + 1])
                     swap(j, j + 1);
-
             }
         }
         isSorted = true;
     }
 
+    // O(n^2)
     public void sortSelect() {
         int f;
         for (int i = 0; i < size; i++) {
@@ -129,7 +182,7 @@ public class Array {
         }
         isSorted = true;
     }
-
+    //O(n^2)
     public void sortInsert() {
         for (int i = 1; i < size; i++) {
             int temp = arr[i];
