@@ -1,5 +1,3 @@
-package jads.two.home;
-
 public class Array {
     private int arr[];
     private int size;

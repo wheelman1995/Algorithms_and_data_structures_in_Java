@@ -1,7 +1,3 @@
-package jads.three.online;
-
-import jads.two.home.Array;
-
 public class Stack {
     private Array stack;
     private int head;
