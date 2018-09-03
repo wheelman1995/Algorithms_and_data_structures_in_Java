@@ -1,5 +1,3 @@
-package jads.three.online;
-
 public class Queue {
     private int size;
     private int[] queue;
