@@ -1,5 +1,3 @@
-package jads.two.home;
-
 public class Second {
     public static void main(String[] args) {
         Array arr = new Array(20);

@@ -1,12 +1,46 @@
-package jads.three.online;
-
 public class Queue {
     private int size;
     private int[] queue;
     private int head;
     private int tail;
     private int items;
-
+    
+    public void setSize(int items) {
+        this.items = items;
+    }
+    
+    public int getTail() {
+        return tail;
+    }
+    
+    public int getItems() {
+        return items;
+    }
+    
+    public void setHead(int head) {
+        this.head = head;
+    }
+    
+    public void setItems(int items) {
+        this.items = items;
+    }
+    
+    public int[] getQueue() {
+        return queue;
+    }
+    
+    public int getSize() {
+        return items;
+    }
+    
+    public void setTail(int tail) {
+        this.tail = tail;
+    }
+    
+    public int getHead() {
+        return head;
+    }
+    
     public Queue(int size) {
         this.size = size;
         queue = new int[size];
