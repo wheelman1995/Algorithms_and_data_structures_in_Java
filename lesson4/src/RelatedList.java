@@ -1,8 +1,8 @@
 import java.util.Objects;
 
 public class RelatedList<T> {
-    private class Node<T> {
-        T c;
+    protected class Node<T> {
+        private T c;
         Node<T> next;
         public Node(T c) {
             this.c = c;
@@ -20,7 +20,7 @@ public class RelatedList<T> {
         }
     }
 
-    private Node<T> head;
+    protected Node<T> head;
 
     public RelatedList() {
         head = null;
@@ -56,7 +56,7 @@ public class RelatedList<T> {
         return true;
     }
 
-    public T delete(String name) {
+    public final T delete(String name) {
         Node<T> current = head;
         Node<T> previous = head;
         while (!(((Cat)current.c).getName()).equals(name)) {
