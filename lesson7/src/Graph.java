@@ -1,3 +1,5 @@
+import java.util.*;
+
 public class Graph {
     private class Vertex {
         public char label;
@@ -18,18 +20,27 @@ public class Graph {
     private Vertex[] vertices;
     private int[][] adjMatrix;
     private int size;
+    private TreeMap<Character, Integer> map;
+    private ArrayList<Integer> path;
 
     public Graph(int size) {
         this.MAX_VERTICES = size;
+        vertices = new Vertex[MAX_VERTICES];
+        adjMatrix = new int[MAX_VERTICES][MAX_VERTICES];
+        map = new TreeMap<>();
+        path = new ArrayList<>();
     }
 
     public void addVertex(char label) {
+        map.put(label, size);
         vertices[size++] = new Vertex(label);
     }
 
-    public void addEdge(int start, int end) {
-        adjMatrix[start][end] = 1;
-        adjMatrix[end][start] = 1;
+    public void addEdge(char label, char label2) {
+        int v = map.get(label);
+        int v2 = map.get(label2);
+        adjMatrix[v][v2] = 1;
+        adjMatrix[v2][v] = 1;
     }
 
     public void showVertex(int vertex) {
@@ -69,20 +80,46 @@ public class Graph {
         resetFlags();
     }
 
-    public void widthTravers(){
+    public void widthTraverseSearch(char label){
+        int v = map.get(label);
+        
         Queue queue = new Queue(MAX_VERTICES);
         vertices[0].wasVisited = true;
-        showVertex(0);
         queue.insert(0);
         while (!queue.isEmpty()){
             int vCurr = queue.remove();
+            if (vCurr == v) {
+                path.add(vCurr);
+                break;
+            }
             int vNext;
+            
             while ((vNext = getUnvisitedVertex(vCurr)) != -1){
                 vertices[vNext].wasVisited = true;
-                showVertex(vNext);
+                if (vNext == v) {
+                    path.add(vNext);
+                    
+                    map.entrySet().forEach(entry -> {
+                        if (entry.getValue() == vCurr) {
+                            resetFlags();
+                            widthTraverseSearch(entry.getKey());
+                        }
+                    });
+                    return;
+                }
                 queue.insert(vNext);
+                
             }
         }
         resetFlags();
+    
+        for (int i = path.size() - 1; i >= 0 ; i--) {
+            int w = i;
+            map.entrySet()
+                    .stream()
+                    .filter(entry -> Objects.equals(entry.getValue(), path.get(w)))
+                    .findFirst()
+                    .ifPresent(entry -> System.out.printf("%s ", entry.getKey()));
+        }
     }
 }
