@@ -21,6 +21,7 @@ public class RelatedList<T> {
     }
 
     private Node<T> head;
+    private Node<T> nextItem;
 
     public RelatedList() {
         head = null;
@@ -36,6 +37,17 @@ public class RelatedList<T> {
         head = n;
     }
 
+    public T find(T t) {
+        Node<T> n = new Node<>(t);
+        Node<T> current = head;
+        while (!current.equals(n)) {
+            if (current.next == null)
+                return null;
+            current = current.next;
+        }
+        return current.c;
+    }
+    
     public T remove() {
         if (isEmpty())
             return null;
@@ -55,7 +67,26 @@ public class RelatedList<T> {
         }
         return true;
     }
-
+    
+    public T delete(T t) {
+        Node<T> current = head;
+        Node<T> previous = head;
+        while (!current.c.equals(t)) {
+            if (current.next == null)
+                return null;
+            else {
+                previous = current;
+                current = current.next;
+            }
+        }
+        if (current == head)
+            head = head.next;
+        else
+            previous.next = current.next;
+        
+        return current.c;
+    }
+    
     public T delete(String name) {
         Node<T> current = head;
         Node<T> previous = head;
@@ -86,5 +117,22 @@ public class RelatedList<T> {
             sb.append((current == null) ? "]" : ", ");
         }
         return sb.toString();
+    }
+    
+    public boolean hasNext() {
+        if (head == null)
+            return false;
+        if (nextItem == null)
+            return true;
+        return nextItem.next != null;
+    }
+    
+    public T next () {
+        if (nextItem == null) {
+            nextItem = head;
+            return nextItem.c;
+        }
+        nextItem = nextItem.next;
+        return nextItem.c;
     }
 }
