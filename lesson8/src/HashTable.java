@@ -1,5 +1,6 @@
 public class HashTable {
     private Item[] hashArr;
+    private RelatedList<Item>[] chainedHashTable;
     private int arrSize;
     private Item nullItem;
 
@@ -7,13 +8,14 @@ public class HashTable {
         this.arrSize = arrSize;
         hashArr = new Item[arrSize];
         nullItem = new Item(-1);
+        chainedHashTable = new RelatedList[arrSize];
     }
 
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < arrSize; i++) {
-            sb.append((hashArr[i] != null) ? hashArr[i].getKey() : "*");
+            sb.append((chainedHashTable[i] != null) ? chainedHashTable[i] : "*");
             if (i < arrSize - 1) {
                 sb.append(", ");
             }
@@ -25,6 +27,14 @@ public class HashTable {
         return key % arrSize;
     }
 
+    public void chainedInsert(Item item) {
+        int key = item.getKey();
+        int hash = hashFunc(key);
+        if (chainedHashTable[hash] == null)
+            chainedHashTable[hash] = new RelatedList<>();
+        chainedHashTable[hash].insert(item);
+    }
+    
     public void insert(Item item) {
         int key = item.getKey();
         int hashVal = hashFunc(key);
@@ -43,6 +53,16 @@ public class HashTable {
         hashArr[hashVal] = item;
     }
 
+    public Item chainedFind(int key) {
+        int hash = hashFunc(key);
+        while (chainedHashTable[hash].hasNext()) {
+            Item item = chainedHashTable[hash].next();
+            if (item.getKey() == key)
+                return item;
+        }
+        return null;
+    }
+    
     public Item find(int key) {
         int hashVal = hashFunc(key);
 //        int step = 0;
@@ -64,6 +84,16 @@ public class HashTable {
         return  19 - (key % 19);
     }
 
+    public Item chainedDelete(int key) {
+        int hash = hashFunc(key);
+        while (chainedHashTable[hash].hasNext()) {
+            Item item = chainedHashTable[hash].next();
+            if (item.getKey() == key)
+                return chainedHashTable[hash].delete(item);
+        }
+        return  null;
+    }
+    
     public Item delete(int key) {
         int hashVal = hashFunc(key);
 //        int step = 0;

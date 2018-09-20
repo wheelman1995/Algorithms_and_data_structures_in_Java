@@ -23,4 +23,9 @@ public class Item {
     public int hashCode() {
         return Objects.hash(data);
     }
+    
+    @Override
+    public String toString() {
+        return Integer.toString(data);
+    }
 }
